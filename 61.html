@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<form action="http://localhost:666/post" method="post" enctype="multipart/form-data">
+		<input type="text" name="username">
+		<input type="radio" name="sex" value="男">
+		<input type="radio" name="sex" value="女">
+		<input type="file" name="photo">
+		<input type="submit" value="提交">
+	</form>
+	<button id="btn1">原生ajax提交</button>
+	<button id="btn2">jq ajax提交</button>
+	<button id="btn3">axios ajax提交</button>
+	<script src="jquery-1.7.2.min.js"></script>
+	<script src="axios.js"></script>
+	<script>
+		//axios.defaults.headers.post['content-Type'] = 'appliction/x-www-form-urlencoded';
+		var obj = {
+			username: 123,
+			sex: '男'
+		}
+
+		str = 'username=123&sex=男'
+
+
+		$('#btn1').click(function () {
+			var req = new XMLHttpRequest();
+			req.open("POST", "http://localhost:666/post", true);
+			req.setRequestHeader("Content-type", "application/json");
+			req.send(JSON.stringify(obj));
+			req.onreadystatechange = function() {
+				if (req.readyState == 4) {
+					if (req.status == 200) {
+						console.log(req.responseText)
+					}
+				}
+			}
+		});
+
+		$('#btn2').click(function () {
+			$.ajax({
+				url: 'http://localhost:666/post',
+				data: obj,
+				contentType: 'application/x-www-form-urlencoded',
+				type: 'post', 
+				success: function (res) {
+					console.log(res)
+				}
+			})
+		})
+
+		$('#btn3').click(function () {
+			axios({
+				url: 'http://localhost:666/post',
+				data: obj,
+				method: 'post', 
+			}).then(function (res) {
+				console.log(res)
+			})
+		})
+
+	</script>
+</body>
+</html>
